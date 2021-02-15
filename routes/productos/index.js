@@ -22,6 +22,6 @@ productos.put('/:id',(req,res)=>{
 })
 
 productos.delete('/:id',(req,res)=>{
-    let body = req.body
-    res.json(Productos.deleteItemById(body))
+    let id = req.params.id
+    res.json(Productos.deleteItemById(id))
 })

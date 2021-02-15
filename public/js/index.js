@@ -64,7 +64,7 @@ myForm.addEventListener('submit',async (e)=>{
     }else{
         let metodo = data['metodo']
         delete data['metodo']
-        let respuesta = await query(`/api/productos/${id}`,metodo,data,id)
+        let respuesta = await query(`/api/productos/${id}`,metodo,data)
         if(respuesta){ 
             myForm.reset() 
             doPost()
@@ -100,7 +100,17 @@ const query = async (query,method,json,id)=>{
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({...json,id})
+        body: JSON.stringify({...json})
+    }
+    switch (method.toLowerCase()) {
+        case 'get':
+            delete options.headers;
+            delete options.body;
+            break;
+        case 'delete':
+            delete options.headers;
+            delete options.body;
+            break;
     }
     if(method.toLowerCase()==='get'){
         delete options.headers;
