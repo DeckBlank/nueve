@@ -12,8 +12,9 @@ class productos{
         let data  = this.validacionEsquema('get',{id})
         if(!data) return this.error()
         if(!this.productos.length) return this.noItems()
-        if(!this.productos[data.id]) return this.itemNotFound()
-        return this.productos[data.id]
+        let filtered = this.productos.filter((producto) => { return producto.id === data.id; });
+        if(filtered.length===0) return this.itemNotFound()
+        return filtered[0]
     }
 
     addItem(obj){
@@ -34,18 +35,17 @@ class productos{
     putItemById(obj){
         let data  = this.validacionEsquema('put',obj)
         if(!data) return this.error()
-        let id = data.id
-        if(!this.productos[id]) return this.noItems() 
-        let newProducto = {...data}
-        this.productos[id] = {...newProducto}
-        return newProducto
+        let indexEncontrado = this.productos.findIndex((producto) => { return producto.id === data.id; });
+        if(indexEncontrado===-1) return this.itemNotFound()
+        this.productos[indexEncontrado] = {...data}
+        return data
     }
     deleteItemById(id){
         let data  = this.validacionEsquema('delete',{id})
         if(!data) return this.error()
-        if(!this.productos[data.id]) return this.noItems() 
-        let filtered = this.productos.filter((producto) => { return producto.id != data.id; });
-        this.productos = filtered;
+        let indexEncontrado = this.productos.findIndex((producto) => { return producto.id === data.id; });
+        if(indexEncontrado===-1) return this.itemNotFound()
+        this.productos.splice(indexEncontrado,1)
         return this.productos
     }
 
